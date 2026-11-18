@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#09090b" />
+  <title>Azz Web2App — Website to Android App Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Mobile Overlay -->
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand">
+          <div class="brand-logo">
+            <i data-lucide="smartphone"></i>
+          </div>
+          <div class="brand-info">
+            <span class="brand-name">Azz Web2App</span>
+            <span class="brand-badge">Studio v2.0</span>
+          </div>
+        </div>
+        <button id="closeSidebarBtn" class="icon-btn mobile-only" aria-label="Tutup Menu">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Navigasi Utama">
+        <button class="nav-item active" data-view="dashboard">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-item" data-view="builder">
+          <i data-lucide="plus-square"></i>
+          <span>Create New App</span>
+        </button>
+        <button class="nav-item" data-view="projects">
+          <i data-lucide="folder-git-2"></i>
+          <span>My Projects</span>
+          <span id="projectCountBadge" class="nav-badge">0</span>
+        </button>
+        <button class="nav-item" data-view="build">
+          <i data-lucide="package-check"></i>
+          <span>Build APK &amp; Export</span>
+        </button>
+        <button class="nav-item" data-view="settings">
+          <i data-lucide="sliders"></i>
+          <span>App Settings</span>
+        </button>
+        <button class="nav-item" data-view="docs">
+          <i data-lucide="book-open"></i>
+          <span>Documentation</span>
+        </button>
+        <button class="nav-item" data-view="about">
+          <i data-lucide="info"></i>
+          <span>About</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="active-project-pill">
+          <span class="status-dot"></span>
+          <div class="pill-text">
+            <small>Proyek Aktif</small>
+            <strong id="sidebarActiveName">My Web App</strong>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <div class="main-wrapper">
+      <!-- Top Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="openSidebarBtn" class="icon-btn mobile-only" aria-label="Buka Menu">
+            <i data-lucide="menu"></i>
+          </button>
+          <div>
+            <h1 id="pageTitle" class="page-title">Dashboard</h1>
+            <p id="pageSubtitle" class="page-subtitle">Ringkasan proyek konversi Website ke Android WebView</p>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <button id="quickSaveBtn" class="btn btn-secondary btn-sm">
+            <i data-lucide="save"></i>
+            <span>Save Project</span>
+          </button>
+          <button id="quickBuildBtn" class="btn btn-primary btn-sm">
+            <i data-lucide="hammer"></i>
+            <span>Build Source</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Content Views -->
+      <main class="content-area">
+
+        <!-- VIEW 1: DASHBOARD -->
+        <section id="view-dashboard" class="view-section active">
+          <div class="hero-card">
+            <div class="hero-content">
+              <span class="eyebrow">ANDROID WEBVIEW GENERATOR</span>
+              <h2>Ubah Website Menjadi Aplikasi Android Native Tanpa Coding</h2>
+              <p>Konfigurasi identitas aplikasi, splash screen, izin perangkat, dan hasilkan paket source code Android Studio siap kompilasi menjadi APK dalam hitungan menit.</p>
+              <div class="hero-actions">
+                <button class="btn btn-primary" data-goto="builder">
+                  <i data-lucide="plus"></i>
+                  <span>Buat Aplikasi Baru</span>
+                </button>
+                <button class="btn btn-secondary" data-goto="docs">
+                  <i data-lucide="file-code"></i>
+                  <span>Panduan Build APK</span>
+                </button>
+              </div>
+            </div>
+            <div class="hero-visual">
+              <div class="code-preview-mini">
+                <div class="code-dots"><span></span><span></span><span></span></div>
+                <pre><code>&lt;manifest package="com.azz.webapp"&gt;
+  &lt;uses-permission android:name="INTERNET"/&gt;
+  &lt;application
+    android:label="Azz Web2App"
+    android:usesCleartextTraffic="true"&gt;
+    &lt;activity android:name=".MainActivity"/&gt;
+  &lt;/application&gt;
+&lt;/manifest&gt;</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon blue"><i data-lucide="layers"></i></div>
+              <div class="stat-info">
+                <span class="stat-label">Total Proyek Tersimpan</span>
+                <strong id="statTotalProjects" class="stat-value">0</strong>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon green"><i data-lucide="check-circle-2"></i></div>
+              <div class="stat-info">
+                <span class="stat-label">Proyek Aktif Saat Ini</span>
+                <strong id="statActiveApp" class="stat-value">My Web App</strong>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon purple"><i data-lucide="cpu"></i></div>
+              <div class="stat-info">
+                <span class="stat-label">Target Android SDK</span>
+                <strong class="stat-value">API 34 (Android 14)</strong>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon amber"><i data-lucide="shield-check"></i></div>
+              <div class="stat-info">
+                <span class="stat-label">Engine Runtime</span>
+                <strong class="stat-value">Chromium WebView</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-header-row">
+            <h3>Proyek Terbaru</h3>
+            <button class="btn btn-ghost btn-sm" data-goto="projects">Lihat Semua &rarr;</button>
+          </div>
+          <div id="dashboardRecentProjects" class="projects-grid"></div>
+        </section>
+
+        <!-- VIEW 2: CREATE NEW APP / BUILDER -->
+        <section id="view-builder" class="view-section">
+          <div class="builder-layout">
+            <!-- Left Form Column -->
+            <div class="builder-controls">
+              <!-- Card A: Website URL -->
+              <div class="panel-card">
+                <div class="panel-header">
+                  <div class="panel-title">
+                    <i data-lucide="globe"></i>
+                    <h3>1. Website URL &amp; Koneksi</h3>
+                  </div>
+                  <span id="urlStatusBadge" class="badge badge-neutral">Menunggu URL</span>
+                </div>
+                <div class="panel-body">
+                  <div class="form-group">
+                    <label for="inputUrl">URL Website Target</label>
+                    <div class="input-with-btn">
+                      <input type="url" id="inputUrl" placeholder="https://example.com" value="https://example.com" />
+                      <button type="button" id="loadWebsiteBtn" class="btn btn-primary">
+                        <i data-lucide="refresh-cw"></i>
+                        <span>Load Website</span>
+                      </button>
+                    </div>
+                    <small id="urlFeedback" class="field-hint">Masukkan URL lengkap diawali http:// atau https://</small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card B: Custom Identitas Aplikasi -->
+              <div class="panel-card">
+                <div class="panel-header">
+                  <div class="panel-title">
+                    <i data-lucide="palette"></i>
+                    <h3>2. Identitas &amp; Tampilan Aplikasi</h3>
+                  </div>
+                </div>
+                <div class="panel-body">
+                  <div class="form-grid-2">
+                    <div class="form-group">
+                      <label for="inputAppName">Nama Aplikasi</label>
+                      <input type="text" id="inputAppName" placeholder="Contoh: Toko Azz" value="My Web App" maxlength="30" />
+                    </div>
+                    <div class="form-group">
+                      <label for="inputPackageName">Package Name (Unique ID)</label>
+                      <input type="text" id="inputPackageName" placeholder="com.azz.myapp" value="com.azz.mywebapp" />
+                      <small id="packageFeedback" class="field-hint">Format: com.domain.namaapp</small>
+                    </div>
+                  </div>
+
+                  <!-- Logo Upload & Controls -->
+                  <div class="logo-editor-box">
+                    <div class="logo-preview-stage" id="logoStage">
+                      <img id="logoPreviewImg" src="" alt="Logo Aplikasi" />
+                    </div>
+                    <div class="logo-controls">
+                      <label class="btn btn-secondary btn-sm file-upload-btn">
+                        <i data-lucide="upload"></i>
+                        <span>Upload Logo (PNG/JPG/SVG)</span>
+                        <input type="file" id="inputLogoFile" accept="image/png,image/jpeg,image/webp,image/svg+xml" hidden />
+                      </label>
+                      <button type="button" id="resetLogoBtn" class="btn btn-ghost btn-sm">Reset Default</button>
+
+                      <div class="slider-row">
+                        <label for="inputLogoSize">Ukuran Logo: <span id="logoSizeVal">72</span>%</label>
+                        <input type="range" id="inputLogoSize" min="40" max="100" value="72" />
+                      </div>
+                      <div class="form-grid-2">
+                        <div class="form-group">
+                          <label for="inputLogoShape">Bentuk Ikon</label>
+                          <select id="inputLogoShape">
+                            <option value="rounded">Rounded Square (Adaptive)</option>
+                            <option value="circle">Circle</option>
+                            <option value="square">Square</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="inputLogoBg">Background Ikon</label>
+                          <input type="color" id="inputLogoBg" value="#18181b" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Color Pickers -->
+                  <div class="form-grid-2">
+                    <div class="form-group">
+                      <label for="inputThemeColor">Warna Tema Utama</label>
+                      <div class="color-input-wrap">
+                        <input type="color" id="inputThemeColor" value="#3b82f6" />
+                        <span id="themeColorHex">#3b82f6</span>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputStatusBarColor">Warna Status Bar</label>
+                      <div class="color-input-wrap">
+                        <input type="color" id="inputStatusBarColor" value="#09090b" />
+                        <span id="statusBarColorHex">#09090b</span>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputNavBarColor">Warna Navigation Bar</label>
+                      <div class="color-input-wrap">
+                        <input type="color" id="inputNavBarColor" value="#09090b" />
+                        <span id="navBarColorHex">#09090b</span>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputSplashBg">Background Splash Screen</label>
+                      <div class="color-input-wrap">
+                        <input type="color" id="inputSplashBg" value="#09090b" />
+                        <span id="splashBgHex">#09090b</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="inputSplashText">Teks Splash Screen</label>
+                    <input type="text" id="inputSplashText" placeholder="Memuat aplikasi..." value="Powered by Azz Web2App" maxlength="50" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card C: Pengaturan Fitur Android -->
+              <div class="panel-card">
+                <div class="panel-header">
+                  <div class="panel-title">
+                    <i data-lucide="settings-2"></i>
+                    <h3>3. Pengaturan WebView &amp; Fitur Android</h3>
+                  </div>
+                </div>
+                <div class="panel-body">
+                  <div class="form-grid-2">
+                    <div class="form-group">
+                      <label for="inputOrientation">Orientasi Layar</label>
+                      <select id="inputOrientation">
+                        <option value="portrait">Portrait (Vertikal)</option>
+                        <option value="landscape">Landscape (Horizontal)</option>
+                        <option value="sensor">Auto Rotate (Sensor)</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputExternalLinks">External Link Handling</label>
+                      <select id="inputExternalLinks">
+                        <option value="inapp">Buka di Dalam Aplikasi</option>
+                        <option value="browser">Buka di Browser Eksternal (Chrome)</option>
+                        <option value="ask">Tanya Pengguna</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="toggles-grid">
+                    <label class="toggle-item">
+                      <div>
+                        <strong>Splash Screen</strong>
+                        <small>Tampilkan layar pembuka saat app dimulai</small>
+                      </div>
+                      <input type="checkbox" id="toggleSplash" checked />
+                    </label>
+                    <label class="toggle-item">
+                      <div>
+                        <strong>Tampilkan Status Bar</strong>
+                        <small>Bar jam, baterai &amp; sinyal Android</small>
+                      </div>
+                      <input type="checkbox" id="toggleStatusBar" checked />
+                    </label>
+                    <label class="toggle-item">
+                      <div>
+                        <strong>Mode Fullscreen</strong>
+                        <small>Sembunyikan bar sistem (Immersive)</small>
+                      </div>
+                      <input type="checkbox" id="toggleFullscreen" />
+                    </label>
+                    <label class="toggle-item">
+                      <div>
+                        <strong>Aktifkan JavaScript</strong>
+                        <small>Wajib untuk website modern &amp; interaktif</small>
+                      </div>
+                      <input type="checkbox" id="toggleJs" checked />
+                    </label>
+                    <label class="toggle-item">
+                      <div>
+                        <strong>Dukungan Zoom (Pinch)</strong>
+                        <small>Izinkan pengguna memperbesar halaman</small>
+                      </div>
+                      <input type="checkbox" id="toggleZoom" />
+                    </label>
+                    <label class="toggle-item">
+                      <div>
+                        <strong>Pull to Refresh</strong>
+                        <small>Tarik layar ke bawah untuk muat ulang</small>
+                      </div>
+                      <input type="checkbox" id="togglePullRefresh" checked />
+                    </label>
+                    <label class="toggle-item">
+                      <div>
+                        <strong>Loading Indicator</strong>
+                        <small>Progress bar tipis saat memuat halaman</small>
+                      </div>
+                      <input type="checkbox" id="toggleLoader" checked />
+                    </label>
+                    <label class="toggle-item">
+                      <div>
+                        <strong>Tombol Back Android</strong>
+                        <small>Kembali ke riwayat halaman sebelumnya</small>
+                      </div>
+                      <input type="checkbox" id="toggleBackBtn" checked />
+                    </label>
+                    <label class="toggle-item">
+                      <div>
+                        <strong>Halaman Offline / Error</strong>
+                        <small>Tampilan kustom saat internet terputus</small>
+                      </div>
+                      <input type="checkbox" id="toggleOfflinePage" checked />
+                    </label>
+                    <label class="toggle-item">
+                      <div>
+                        <strong>Download Manager</strong>
+                        <small>Izinkan unduh file dari website</small>
+                      </div>
+                      <input type="checkbox" id="toggleDownload" checked />
+                    </label>
+                    <label class="toggle-item">
+                      <div>
+                        <strong>Upload File (Storage)</strong>
+                        <small>Dukungan input file &amp; galeri</small>
+                      </div>
+                      <input type="checkbox" id="toggleUpload" checked />
+                    </label>
+                    <label class="toggle-item">
+                      <div>
+                        <strong>Akses Kamera</strong>
+                        <small>Izinkan WebRTC / input foto kamera</small>
+                      </div>
+                      <input type="checkbox" id="toggleCamera" />
+                    </label>
+                  </div>
+
+                  <div class="builder-bottom-actions">
+                    <button type="button" id="saveProjectBtn" class="btn btn-secondary">
+                      <i data-lucide="save"></i>
+                      <span>Simpan Konfigurasi</span>
+                    </button>
+                    <button type="button" id="goToBuildBtn" class="btn btn-primary">
+                      <i data-lucide="arrow-right"></i>
+                      <span>Lanjut ke Build APK</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Live App Preview -->
+            <div class="builder-preview-col">
+              <div class="preview-sticky-card">
+                <div class="preview-toolbar">
+                  <div class="preview-app-badge">
+                    <img id="previewMiniIcon" src="" alt="Icon" />
+                    <div>
+                      <strong id="previewAppTitle">My Web App</strong>
+                      <small id="previewPackageText">com.azz.mywebapp</small>
+                    </div>
+                  </div>
+                  <div class="preview-sim-actions">
+                    <button type="button" id="simSplashBtn" class="btn btn-ghost btn-xs" title="Simulasi Splash Screen">
+                      <i data-lucide="sparkles"></i>
+                      <span>Splash</span>
+                    </button>
+                    <button type="button" id="simOfflineBtn" class="btn btn-ghost btn-xs" title="Simulasi Mode Offline">
+                      <i data-lucide="wifi-off"></i>
+                      <span>Offline</span>
+                    </button>
+                    <button type="button" id="simReloadBtn" class="btn btn-ghost btn-xs" title="Muat Ulang Preview">
+                      <i data-lucide="rotate-cw"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Smartphone Frame -->
+                <div class="phone-stage">
+                  <div id="phoneFrame" class="phone-frame portrait">
+                    <div class="phone-notch"></div>
+
+                    <!-- Android Status Bar -->
+                    <div id="simStatusBar" class="android-status-bar">
+                      <span>10:11</span>
+                      <div class="status-icons">
+                        <i data-lucide="wifi"></i>
+                        <i data-lucide="battery-full"></i>
+                      </div>
+                    </div>
+
+                    <!-- Loading Progress Bar -->
+                    <div id="simProgressBar" class="android-progress-bar"></div>
+
+                    <!-- Screen Content Area -->
+                    <div class="android-screen">
+                      <!-- Splash Screen Overlay -->
+                      <div id="simSplashOverlay" class="sim-splash hidden">
+                        <div id="simSplashLogoBox" class="sim-splash-logo">
+                          <img id="simSplashImg" src="" alt="Splash Logo" />
+                        </div>
+                        <h4 id="simSplashAppName">My Web App</h4>
+                        <p id="simSplashSubtext">Powered by Azz Web2App</p>
+                        <div class="sim-spinner"></div>
+                      </div>
+
+                      <!-- Offline Overlay -->
+                      <div id="simOfflineOverlay" class="sim-offline hidden">
+                        <i data-lucide="wifi-off"></i>
+                        <h4>Tidak Ada Koneksi Internet</h4>
+                        <p>Periksa Wi-Fi atau data seluler Anda lalu coba lagi.</p>
+                        <button type="button" id="simRetryOfflineBtn" class="btn btn-primary btn-sm">Coba Lagi</button>
+                      </div>
+
+                      <!-- Iframe Blocked Fallback -->
+                      <div id="simIframeNotice" class="sim-iframe-notice hidden">
+                        <i data-lucide="shield-alert"></i>
+                        <h4>Pratinjau Iframe Dibatasi Website</h4>
+                        <p id="simIframeUrlText">https://example.com</p>
+                        <small>Website ini memasang header <code>X-Frame-Options</code> sehingga tidak bisa tampil di dalam iframe browser, namun <strong>tetap berjalan normal</strong> di Android WebView.</small>
+                        <a id="simOpenExternalLink" href="https://example.com" target="_blank" rel="noopener" class="btn btn-secondary btn-sm">Buka di Tab Baru</a>
+                      </div>
+
+                      <!-- Live Website Frame -->
+                      <iframe id="liveWebFrame" title="Live Website Preview" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+                    </div>
+
+                    <!-- Android Navigation Bar -->
+                    <div id="simNavBar" class="android-nav-bar">
+                      <button type="button" id="simBackAction" title="Android Back"><i data-lucide="chevron-left"></i></button>
+                      <button type="button" id="simHomeAction" title="Home"><i data-lucide="circle"></i></button>
+                      <button type="button" id="simRecentAction" title="Overview"><i data-lucide="square"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- VIEW 3: MY PROJECTS -->
+        <section id="view-projects" class="view-section">
+          <div class="projects-toolbar">
+            <div class="search-box">
+              <i data-lucide="search"></i>
+              <input type="text" id="searchProjectsInput" placeholder="Cari nama aplikasi atau package name..." />
+            </div>
+            <div class="projects-actions">
+              <label class="btn btn-secondary btn-sm file-upload-btn">
+                <i data-lucide="upload"></i>
+                <span>Import Konfigurasi</span>
+                <input type="file" id="importConfigFile" accept=".azzapp,.json,application/json" hidden />
+              </label>
+              <button type="button" id="exportActiveConfigBtn" class="btn btn-secondary btn-sm">
+                <i data-lucide="download"></i>
+                <span>Export Aktif</span>
+              </button>
+              <button type="button" class="btn btn-primary btn-sm" data-goto="builder">
+                <i data-lucide="plus"></i>
+                <span>Proyek Baru</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="projectsListContainer" class="projects-grid"></div>
+        </section>
+
+        <!-- VIEW 4: BUILD APK & GENERATOR -->
+        <section id="view-build" class="view-section">
+          <div class="build-layout">
+            <div class="panel-card">
+              <div class="panel-header">
+                <div class="panel-title">
+                  <i data-lucide="cpu"></i>
+                  <h3>Android WebView Build Center</h3>
+                </div>
+                <span class="badge badge-info">Gradle 8.4 &bull; Java 17</span>
+              </div>
+              <div class="panel-body">
+                <div class="build-app-summary">
+                  <img id="buildAppLogo" src="" alt="App Logo" />
+                  <div class="build-app-meta">
+                    <h2 id="buildAppName">My Web App</h2>
+                    <p id="buildPackageName" class="mono">com.azz.mywebapp</p>
+                    <a id="buildAppUrl" href="https://example.com" target="_blank" rel="noopener">https://example.com</a>
+                  </div>
+                </div>
+
+                <div id="buildSummaryChips" class="summary-chips"></div>
+
+                <div class="build-notice-box">
+                  <i data-lucide="info"></i>
+                  <div>
+                    <strong>Catatan Teknis Kompilasi APK</strong>
+                    <p>Karena browser web tidak memiliki Android SDK &amp; Gradle Compiler native, proses ini akan merakit <strong>paket source code Android Studio lengkap</strong> (<code>AndroidManifest.xml</code>, <code>MainActivity.java</code>, <code>build.gradle</code>, dan resource ikon) sesuai seluruh konfigurasi Anda. Buka paket tersebut di Android Studio atau GitHub Actions untuk menghasilkan file <code>app-release.apk</code> bertanda tangan.</p>
+                  </div>
+                </div>
+
+                <div class="build-progress-box">
+                  <div class="progress-header">
+                    <span id="buildStatusText">Siap menghasilkan paket Android WebView</span>
+                    <strong id="buildPercentText">0%</strong>
+                  </div>
+                  <div class="progress-track">
+                    <div id="buildProgressFill" class="progress-fill"></div>
+                  </div>
+                  <div id="buildConsoleLog" class="build-console">
+                    <div>[Azz Web2App] Engine siap. Klik "Build Android Project" untuk memulai.</div>
+                  </div>
+                </div>
+
+                <div class="build-cta-row">
+                  <button type="button" id="startBuildBtn" class="btn btn-primary btn-lg">
+                    <i data-lucide="hammer"></i>
+                    <span>Build APK Source Package</span>
+                  </button>
+                  <button type="button" id="downloadSourceBundleBtn" class="btn btn-secondary btn-lg hidden">
+                    <i data-lucide="download"></i>
+                    <span>Download Android Project Bundle</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Generated Code Inspector -->
+            <div class="panel-card">
+              <div class="panel-header">
+                <div class="panel-title">
+                  <i data-lucide="file-code-2"></i>
+                  <h3>Generated Android Source Inspector</h3>
+                </div>
+                <button type="button" id="copyCodeBtn" class="btn btn-ghost btn-sm">
+                  <i data-lucide="copy"></i>
+                  <span>Salin Kode</span>
+                </button>
+              </div>
+              <div class="code-tabs">
+                <button type="button" class="code-tab active" data-file="manifest">AndroidManifest.xml</button>
+                <button type="button" class="code-tab" data-file="activity">MainActivity.java</button>
+                <button type="button" class="code-tab" data-file="gradle">app/build.gradle</button>
+                <button type="button" class="code-tab" data-file="strings">strings.xml</button>
+              </div>
+              <pre id="generatedCodeViewer" class="code-viewer"></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 5: APP SETTINGS -->
+        <section id="view-settings" class="view-section">
+          <div class="panel-card narrow-card">
+            <div class="panel-header">
+              <div class="panel-title">
+                <i data-lucide="sliders"></i>
+                <h3>Pengaturan Workspace &amp; Default Build</h3>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="form-group">
+                <label for="settingDefaultPrefix">Prefix Package Name Default</label>
+                <input type="text" id="settingDefaultPrefix" value="com.azz" placeholder="com.perusahaan" />
+                <small class="field-hint">Digunakan otomatis saat membuat proyek baru.</small>
+              </div>
+              <div class="form-group">
+                <label for="settingMinSdk">Minimum Android Version (MinSDK)</label>
+                <select id="settingMinSdk">
+                  <option value="24">Android 7.0 Nougat (API 24) - Direkomendasikan</option>
+                  <option value="26">Android 8.0 Oreo (API 26)</option>
+                  <option value="29">Android 10 (API 29)</option>
+                </select>
+              </div>
+              <div class="toggles-grid single-col">
+                <label class="toggle-item">
+                  <div>
+                    <strong>Auto-Save Perubahan</strong>
+                    <small>Simpan otomatis perubahan konfigurasi ke LocalStorage</small>
+                  </div>
+                  <input type="checkbox" id="settingAutoSave" checked />
+                </label>
+              </div>
+              <div class="settings-actions">
+                <button type="button" id="saveWorkspaceSettingsBtn" class="btn btn-primary">Simpan Pengaturan</button>
+                <button type="button" id="clearAllDataBtn" class="btn btn-danger">Reset Semua Data Lokal</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 6: DOCUMENTATION -->
+        <section id="view-docs" class="view-section">
+          <div class="panel-card narrow-card doc-content">
+            <h2>Dokumentasi Azz Web2App</h2>
+            <p>Panduan lengkap mengubah website menjadi aplikasi Android WebView siap rilis menggunakan Azz Web2App.</p>
+
+            <h3>1. Alur Kerja Pembuatan Aplikasi</h3>
+            <ol>
+              <li>Buka menu <strong>Create New App</strong> dan masukkan URL website (wajib menggunakan HTTPS untuk keamanan Android 9+).</li>
+              <li>Atur <strong>Nama Aplikasi</strong>, <strong>Package Name</strong> unik (misalnya <code>com.tokosaya.app</code>), dan unggah logo beresolusi tinggi (disarankan 512x512 px).</li>
+              <li>Sesuaikan warna tema, status bar, splash screen, serta izin seperti kamera, upload file, dan tombol kembali.</li>
+              <li>Uji tampilan melalui <strong>Live App Preview</strong> di sisi kanan layar.</li>
+              <li>Buka menu <strong>Build APK &amp; Export</strong> untuk menghasilkan kode sumber Android Studio.</li>
+            </ol>
+
+            <h3>2. Cara Kompilasi Source Menjadi File .APK</h3>
+            <p>Setelah mengunduh paket source code dari halaman Build:</p>
+            <ol>
+              <li>Buat proyek baru di <strong>Android Studio</strong> dengan template <em>Empty Views Activity (Java)</em> menggunakan Package Name yang sama.</li>
+              <li>Ganti isi file <code>AndroidManifest.xml</code>, <code>MainActivity.java</code>, <code>build.gradle</code>, dan <code>strings.xml</code> dengan kode yang dihasilkan oleh Azz Web2App.</li>
+              <li>Klik menu <strong>Build &rarr; Build Bundle(s) / APK(s) &rarr; Build APK(s)</strong> di Android Studio.</li>
+              <li>File <code>app-debug.apk</code> atau <code>app-release.apk</code> siap dipasang di perangkat Android.</li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- VIEW 7: ABOUT -->
+        <section id="view-about" class="view-section">
+          <div class="panel-card narrow-card doc-content">
+            <div class="about-header">
+              <div class="brand-logo large"><i data-lucide="smartphone"></i></div>
+              <div>
+                <h2>Azz Web2App Platform</h2>
+                <p>Versi 2.0 &bull; Pure Web Architecture</p>
+              </div>
+            </div>
+            <p><strong>Azz Web2App</strong> adalah platform generator aplikasi Android berbasis WebView yang dirancang ringan, cepat, dan berjalan sepenuhnya di sisi klien (browser) tanpa ketergantungan server eksternal.</p>
+            <div class="info-list">
+              <div><span>Arsitektur</span><strong>HTML5, CSS3, Vanilla JavaScript</strong></div>
+              <div><span>Penyimpanan</span><strong>Browser LocalStorage (Offline-Ready)</strong></div>
+              <div><span>Output Build</span><strong>Android Gradle WebView Source Package</strong></div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Confirmation Modal -->
+  <div id="confirmModal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <h3 id="modalTitle">Konfirmasi Tindakan</h3>
+      <p id="modalMessage">Apakah Anda yakin ingin melanjutkan?</p>
+      <div class="modal-actions">
+        <button type="button" id="modalCancelBtn" class="btn btn-secondary">Batal</button>
+        <button type="button" id="modalConfirmBtn" class="btn btn-danger">Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
